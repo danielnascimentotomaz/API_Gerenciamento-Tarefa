@@ -57,7 +57,7 @@ namespace GerenciamentoTarefa.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id,[FromBody]Tarefa tarefa){
+        public IActionResult AtualizarTarefa([FromRoute] int id,[FromBody]Tarefa tarefa){
 
             try{
 
@@ -85,6 +85,51 @@ namespace GerenciamentoTarefa.Controllers
 
         }
 
+
+ //****************************************************************************//
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletarTarefa([FromRoute] int id){
+
+            try{
+
+                _tarefa.DeletarTarefaId(id);
+
+                return StatusCode(204);
+
+            }catch(TarefaInexistenteException ex){
+
+                var exceptionDetails =  new ExceptionDetails(
+                    ex.Message,
+                    DateTime.Now,
+                    StatusCodes.Status404NotFound
+                );
+
+                return StatusCode(404,exceptionDetails);
+
+            } }  
+
+
+ //****************************************************************************//
+
+        [HttpGet("{id}")]
+        public IActionResult BuscarTarefaId([FromRoute] int id){
+
+            try{
+
+                var tarefa = _tarefa.obterTarefaPorId(id);
+                return StatusCode(200,tarefa);
+            }catch(TarefaInexistenteException ex){
+
+                 var exceptionDetails =  new ExceptionDetails(
+                    ex.Message,
+                    DateTime.Now,
+                    StatusCodes.Status404NotFound
+                );
+
+                return StatusCode(404,exceptionDetails);
+
+            } }    
 
 
   

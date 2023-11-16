@@ -43,10 +43,7 @@ namespace GerenciamentoTarefa.Service
             return listarTarefasBD;    
         }
 
-        public Tarefa obterTarefaPorId(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
 //****************************************************************************//
 
         public void AtualizarTarefa(int id, Tarefa tarefa)
@@ -74,12 +71,30 @@ namespace GerenciamentoTarefa.Service
     
         }
 
+//****************************************************************************//
+
+       public Tarefa obterTarefaPorId(int id)
+        {
+            var tarefaBD = _context.tarefas.Find(id);
+            if(tarefaBD == null){
+                throw new TarefaInexistenteException($"Tarefa com ID {id} não existem no banco de dados");
+            
+            }
+            return tarefaBD;
+        }
 
 
+//****************************************************************************//
+        public void DeletarTarefaId(int id)
+        {
+             var tarefaBD = _context.tarefas.Find(id);
+            if(tarefaBD == null){
+                throw new TarefaInexistenteException($"Tarefa com ID {id} não existem no banco de dados");
+            }
 
-
-
-    }
-
+            _context.tarefas.Remove(tarefaBD);
+            _context.SaveChanges();
+        }
     
-}
+    
+}}

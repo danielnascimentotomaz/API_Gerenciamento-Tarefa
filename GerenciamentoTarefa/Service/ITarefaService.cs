@@ -17,6 +17,8 @@ namespace GerenciamentoTarefa.Service
         Tarefa obterTarefaPorId(int id);
 
          void AtualizarTarefa(int id, Tarefa tarefa);
+
+         void DeletarTarefaId(int id);
        
     }
 }
