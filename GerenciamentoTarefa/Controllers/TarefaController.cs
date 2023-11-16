@@ -24,46 +24,75 @@ namespace GerenciamentoTarefa.Controllers
         [HttpGet]
         public IActionResult ListaTarefas()
         {
-
             var todasTarefas = _tarefa.listarTodasTarefas();
 
-            return StatusCode(200,todasTarefas);
-
-            
+            return StatusCode(200,todasTarefas);   
         }
+
+
+ //****************************************************************************//       
 
         [HttpPost]
-      
         public IActionResult CriarTarefa([FromBody] Tarefa tarefa){
+         
+        try
+        {
+            var tarefaCriada = _tarefa.CriarTarefa(tarefa);
 
-          {
-    try
-    {
-       
-
-        var tarefaCriada = _tarefa.CriarTarefa(tarefa);
-
-        return StatusCode(201, tarefaCriada);
-    }
-    catch (TituloTarefaInvalidoException ex)
-    {
-       var exceptionDetails =  new ExceptionDetails(
-        ex.Message,
-        DateTime.Now,
-        StatusCodes.Status409Conflict
+            return StatusCode(201, tarefaCriada);
+        }
+        catch (TituloTarefaInvalidoException ex)
+        {
+        var exceptionDetails =  new ExceptionDetails(
+            ex.Message,
+            DateTime.Now,
+            StatusCodes.Status409Conflict);
         
-        );
-       
-       
-       
-       return BadRequest(exceptionDetails);
-    }
+        return StatusCode(409,exceptionDetails);
+        }
+        }
+
+
+ //****************************************************************************//       
+
+
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id,[FromBody]Tarefa tarefa){
+
+            try{
+
+                 _tarefa.AtualizarTarefa(id,tarefa);
+
+                return StatusCode(201);
+
+            }catch(TarefaInexistenteException ex){
+
+                var exceptionDetails =  new ExceptionDetails(
+                    ex.Message,
+                    DateTime.Now,
+                    StatusCodes.Status404NotFound
+                );
+                return StatusCode(404,exceptionDetails);
+        }catch(TituloTarefaInvalidoException ex){
+
+            var exceptionDetails =  new ExceptionDetails(
+            ex.Message,
+            DateTime.Now,
+            StatusCodes.Status409Conflict);
+
+            return StatusCode(409,exceptionDetails);
+        }
 
         }
 
 
 
+  
+  
+  
+  
+  
     }
 
 }
-}
+

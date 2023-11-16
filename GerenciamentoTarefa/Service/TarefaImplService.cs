@@ -18,7 +18,8 @@ namespace GerenciamentoTarefa.Service
             _context = tarefa;
         
         }
-
+     
+//****************************************************************************//
         public Tarefa CriarTarefa(Tarefa tarefa)
         {
 
@@ -30,10 +31,10 @@ namespace GerenciamentoTarefa.Service
 
             _context.tarefas.Add(tarefa);
             _context.SaveChanges();
-            return tarefa;
-        
-            
+            return tarefa;    
         }
+
+ //****************************************************************************//       
 
         public List<Tarefa> listarTodasTarefas()
         {
@@ -46,6 +47,38 @@ namespace GerenciamentoTarefa.Service
         {
             throw new NotImplementedException();
         }
+//****************************************************************************//
+
+        public void AtualizarTarefa(int id, Tarefa tarefa)
+        {
+
+            var tarefaBD  = _context.tarefas.Find(id);
+
+            if(tarefaBD == null){
+
+                throw new TarefaInexistenteException($"Tarefa com ID {id} não existem no banco de dados");
+            }
+
+            if (string.IsNullOrEmpty(tarefa.Titulo))
+           {
+            throw new TituloTarefaInvalidoException();
+            }
+
+            tarefaBD.Id = tarefa.Id;
+            tarefaBD.Titulo = tarefa.Titulo;
+            tarefaBD.Descricao= tarefa.Descricao;
+            tarefaBD.Concluida = tarefa.Concluida;
+
+            _context.Update(tarefaBD);
+            _context.SaveChanges();
+    
+        }
+
+
+
+
+
+
     }
 
     
