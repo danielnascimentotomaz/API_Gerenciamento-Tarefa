@@ -1,4 +1,5 @@
-﻿using GerenciamentoTarefa.Excecoes;
+﻿using GerenciamentoTarefa.Dto;
+using GerenciamentoTarefa.Excecoes;
 using GerenciamentoTarefa.Models;
 using GerenciamentoTarefa.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace GerenciamentoTarefa.Controllers
 
 
         [HttpGet]
-        public IActionResult ListaTarefas()
+        public IActionResult ListaTarefas(int page = 1)
         {
-            var todasTarefas = _tarefa.listarTodasTarefas();
+            var todasTarefas = _tarefa.listarTodasTarefas(page);
 
             return StatusCode(200,todasTarefas);   
         }
@@ -33,7 +34,7 @@ namespace GerenciamentoTarefa.Controllers
  //****************************************************************************//       
 
         [HttpPost]
-        public IActionResult CriarTarefa([FromBody] Tarefa tarefa){
+        public IActionResult CriarTarefa([FromBody] TarefaDto tarefa){
          
         try
         {
@@ -57,7 +58,7 @@ namespace GerenciamentoTarefa.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult AtualizarTarefa([FromRoute] int id,[FromBody]Tarefa tarefa){
+        public IActionResult AtualizarTarefa([FromRoute] int id,[FromBody]TarefaDto tarefa){
 
             try{
 
